@@ -21,6 +21,7 @@ app.post("/Review",(req,res)=>{
     curr_id++;
     reviews.push(item);
 
+    console.log(reviews);
     res.status(200).json("ok");
 });
 app.get('/Review', (req, res) => {
