@@ -22,6 +22,9 @@ app.post("/Review",(req,res)=>{
 
     res.status(200).json("ok");
 });
+app.get('/Review', (req, res) => {
+    res.status(200).json(reviews);
+});
 
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
