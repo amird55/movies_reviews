@@ -14,8 +14,28 @@
     <br>
     <button onclick="AddReview();">הוספה</button>
 </div>
+<div id="AllReviews"></div>
 
 <script>
+    var AllReviews=[];
+    async function getAllReviews(){
+        let url = "/Review";
+        let response = await fetch(url);
+        let data = await response.json();
+        AllReviews=data;
+        console.log("data was entered");
+        ShowReviews();
+    }
+    function ShowReviews(){
+        let s='';
+        for(let rr of AllReviews){
+            s += `<div>`;
+            s += `<b>${rr.title}</b><br>`;
+            s += `${rr.content}`;
+            s += `</div>`;
+        }
+        document.getElementById('AllReviews').innerHTML=s;
+    }
     async function AddReview(){
         let title   = document.getElementById("title").value;
         let content = document.getElementById("content").value;
@@ -31,6 +51,7 @@
         );
         let data=await response.json();
     }
+    getAllReviews();
 </script>
 </body>
 </html>
