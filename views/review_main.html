@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="addingForm">
+    <label for="title">שם הסרט:</label>
+    <input type="text" id="title" />
+    <br>
+    <label for="content">הביקורת שלי:</label>
+    <textarea id="content"></textarea>
+    <br>
+    <button>הוספה</button>
+</div>
+
+<script>
+    async function AddReview(){
+        let title   = document.getElementById("title").value;
+        let content = document.getElementById("content").value;
+        let url = "/Review";
+        let response=await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({title:title,content:content})
+            }
+        );
+        let data=await response.json();
+    }
+</script>
+</body>
+</html>
