@@ -1,3 +1,4 @@
+//npm i express body-parser ejs
 const express = require('express');
 const port = 4371;
 const app = express();
@@ -6,6 +7,9 @@ app.use(express.json());
 const bodyParser = require('body-parser');
 const path = require("path");
 app.use(bodyParser.urlencoded({extended: false}));
+
+app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, "/views"));
 
 let curr_id=1;
 let reviews=[];
@@ -30,6 +34,11 @@ app.get('/Review', (req, res) => {
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname,"/views/review_main.html"));
+});
+app.get("/ssr", (req,res)=>{
+    res.render("review_ssr",
+        {AllReviews:reviews}
+    );
 });
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
