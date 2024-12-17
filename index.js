@@ -1,4 +1,4 @@
-//npm i express body-parser ejs htmlspecialchars
+//npm i express body-parser ejs htmlspecialchars mysql2
 const express = require('express');
 const port = 4371;
 const app = express();
@@ -7,6 +7,9 @@ app.use(express.json());
 const bodyParser = require('body-parser');
 const path = require("path");
 app.use(bodyParser.urlencoded({extended: false}));
+
+let db_M = require('./database');
+global.db_pool = db_M.pool;
 
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, "/views"));
@@ -41,6 +44,27 @@ app.get('/Review', (req, res) => {
         });
     }
     res.status(200).json(safeRows);
+});
+
+app.post("/register",async (req,res)=>{
+    let name        = req.body.name;
+    let username    = req.body.username;
+    let passwd      = req.body.passwd;
+
+    let Query  = "INSERT INTO `users`";
+    Query += "( `name`, `username`, `passwd`)  ";
+    Query += " VALUES ";
+    Query += `( '${name}', '${username}', '${passwd}')  `;
+
+    const promisePool = db_pool.promise();
+    let rows=[];
+    try {
+        [rows] = await promisePool.query(Query);
+        res.status(200).json({msg:"ok",insertId:rows.insertId});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({msg:err});
+    }
 });
 
 app.get('/', (req, res) => {
