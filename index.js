@@ -47,10 +47,36 @@ app.get('/Review', (req, res) => {
     res.status(200).json(safeRows);
 });
 
+app.post("/login",async (req,res)=>{
+    let username    = req.body.username;
+    let passwd      = md5('2'+req.body.passwd);
+
+    let Query="SELECT * FROM users";
+    Query +=" WHERE ";
+    Query +=` username='${username}'`;
+    Query +=" AND ";
+    Query +=` passwd='${passwd}'`;
+    console.log(Query);
+
+    const promisePool = db_pool.promise();
+    let rows=[];
+    try {
+        [rows] = await promisePool.query(Query);
+        if (rows.length === 0){
+            res.status(200).json({msg:"NO"});
+        } else {
+            res.status(200).json({msg:"ok"});
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({msg:err});
+    }
+
+});
 app.post("/register",async (req,res)=>{
     let name        = req.body.name;
     let username    = req.body.username;
-    let passwd      = md5(req.body.passwd);
+    let passwd      = md5('2'+req.body.passwd);
 
     let Query  = "INSERT INTO `users`";
     Query += "( `name`, `username`, `passwd`)  ";
