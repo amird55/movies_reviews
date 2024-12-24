@@ -1,4 +1,4 @@
-//npm i express body-parser ejs htmlspecialchars mysql2
+//npm i express body-parser ejs htmlspecialchars mysql2 md5
 const express = require('express');
 const port = 4371;
 const app = express();
@@ -15,6 +15,7 @@ app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, "/views"));
 
 var htmlspecialchars = require('htmlspecialchars');
+var md5 = require('md5');
 
 let curr_id=1;
 let reviews=[];
@@ -49,7 +50,7 @@ app.get('/Review', (req, res) => {
 app.post("/register",async (req,res)=>{
     let name        = req.body.name;
     let username    = req.body.username;
-    let passwd      = req.body.passwd;
+    let passwd      = md5(req.body.passwd);
 
     let Query  = "INSERT INTO `users`";
     Query += "( `name`, `username`, `passwd`)  ";
