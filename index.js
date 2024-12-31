@@ -102,6 +102,9 @@ app.get("/ssr", (req,res)=>{
         {AllReviews:reviews}
     );
 });
+app.get('/Lpage', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname,"/views/login.html"));
+});
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port http://localhost:${port}`);

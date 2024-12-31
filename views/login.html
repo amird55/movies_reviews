@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>כניסה לתוכנה</title>
+    <style>
+        .red{background-color: lightcoral}
+        .green{background-color: darkgreen;color: white;}
+    </style>
+</head>
+<body>
+<div id="msg"></div>
+<h1>log in</h1>
+<label for="uname">שם משתמש</label>
+<input type="text" name="uname" id="uname">
+<br>
+<label for="passwd">סיסמה:</label>
+<input type="text" name="passwd" id="passwd">
+<br>
+<button onclick="check_login()">send</button>
+<script>
+    async function check_login(){
+        let fetch_body={
+            username:document.getElementById('uname').value,
+            passwd  :document.getElementById('passwd').value,
+        };
+        let url="/login";
+        let response=await fetch(url,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(fetch_body)
+            }
+        );
+        let data=await response.json();
+        console.log("data=",data);
+        if(data.msg==="ok"){
+            document.getElementById('msg').innerHTML="רשאי להכנס";
+            document.getElementById('msg').classList.remove('red')
+            document.getElementById('msg').classList.add('green');
+        } else {
+            document.getElementById('msg').innerHTML="wrong parameters";
+            document.getElementById('msg').classList.remove('green')
+            document.getElementById('msg').classList.add('red');
+        }
+    }
+</script>
+</body>
+</html>
