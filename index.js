@@ -18,6 +18,7 @@ app.set('views', path.join(__dirname, "/views"));
 
 var htmlspecialchars = require('htmlspecialchars');
 var md5 = require('md5');
+const { addSlashes, stripSlashes } = require('slashes');
 
 let curr_id=1;
 let reviews=[];
@@ -50,7 +51,7 @@ app.get('/Review', (req, res) => {
 });
 
 app.post("/login",async (req,res)=>{
-    let username    = req.body.username;
+    let username    = addSlashes(req.body.username);
     let passwd      = md5('2'+req.body.passwd);
 
     let Query="SELECT * FROM users";
@@ -76,8 +77,8 @@ app.post("/login",async (req,res)=>{
 
 });
 app.post("/register",async (req,res)=>{
-    let name        = req.body.name;
-    let username    = req.body.username;
+    let name        = addSlashes(req.body.name);
+    let username    = addSlashes(req.body.username);
     let passwd      = md5('2'+req.body.passwd);
 
     let Query  = "INSERT INTO `users`";
