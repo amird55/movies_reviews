@@ -1,4 +1,6 @@
-//npm i express body-parser ejs htmlspecialchars mysql2 md5
+//npm i express body-parser ejs htmlspecialchars mysql2 md5 slashes@2.0.0
+// https://www.npmjs.com/package/slashes/v/2.0.0
+
 const express = require('express');
 const port = 4371;
 const app = express();
