@@ -85,6 +85,7 @@ app.post("/register",async (req,res)=>{
     Query += "( `name`, `username`, `passwd`)  ";
     Query += " VALUES ";
     Query += `( '${name}', '${username}', '${passwd}')  `;
+    console.log(Query);
 
     const promisePool = db_pool.promise();
     let rows=[];
@@ -96,6 +97,26 @@ app.post("/register",async (req,res)=>{
         res.status(500).json({msg:err});
     }
 });
+
+app.get('/UsersList',async (req,res)=>{
+    let Query="SELECT name,username FROM users";
+    console.log(Query);
+
+    const promisePool = db_pool.promise();
+    let rows=[];
+    try {
+        [rows] = await promisePool.query(Query);
+        for(let k in rows){
+            rows[k].name     = stripSlashes(rows[k].name);
+            rows[k].username = stripSlashes(rows[k].username);
+        }
+        res.status(200).json(rows);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({msg:err});
+    }
+
+})
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname,"/views/review_main.html"));
