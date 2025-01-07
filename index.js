@@ -27,6 +27,8 @@ let r1={id:curr_id,title:"XSS",content:"<img src='x' onerror='alert(1)' >"};
 curr_id++;
 reviews.push(r1);
 
+let HadLoggin=false;
+
 app.post("/Review",(req,res)=>{
     let item={};
     item.id      = curr_id;
@@ -68,6 +70,7 @@ app.post("/login",async (req,res)=>{
         if (rows.length === 0){
             res.status(200).json({msg:"NO"});
         } else {
+            HadLoggin=true;
             res.status(200).json({msg:"ok"});
         }
     } catch (err) {
@@ -128,6 +131,12 @@ app.get("/ssr", (req,res)=>{
 });
 app.get('/Lpage', (req, res) => {
     res.status(200).sendFile(path.join(__dirname,"/views/login.html"));
+});
+app.get('/p1', (req, res) => {
+    if(!HadLoggin){
+        res.redirect("/Lpage");
+    } else
+    res.status(200).sendFile(path.join(__dirname,"/views/p1.html"));
 });
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
