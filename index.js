@@ -16,6 +16,9 @@ global.db_pool = db_M.pool;
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, "/views"));
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 var htmlspecialchars = require('htmlspecialchars');
 var md5 = require('md5');
 const { addSlashes, stripSlashes } = require('slashes');
@@ -70,7 +73,12 @@ app.post("/login",async (req,res)=>{
         if (rows.length === 0){
             res.status(200).json({msg:"NO"});
         } else {
-            HadLoggin=true;
+            // console.log("id=",rows[0].id);
+            let val = `${rows[0].id},${rows[0].name}`;
+            res.cookie("ImLogged", val, {
+                maxAge: 31*24*60*60 * 1000, // 3hrs in ms
+            });
+            //HadLoggin=true;
             res.status(200).json({msg:"ok"});
         }
     } catch (err) {
@@ -133,7 +141,8 @@ app.get('/Lpage', (req, res) => {
     res.status(200).sendFile(path.join(__dirname,"/views/login.html"));
 });
 app.get('/p1', (req, res) => {
-    if(!HadLoggin){
+    // console.log(req.cookies);
+    if(req.cookies.ImLogged === undefined){
         res.redirect("/Lpage");
     } else
     res.status(200).sendFile(path.join(__dirname,"/views/p1.html"));
