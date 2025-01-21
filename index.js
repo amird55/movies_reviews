@@ -1,4 +1,4 @@
-//npm i express body-parser ejs htmlspecialchars mysql2 md5 slashes@2.0.0
+//npm i express cookie-parser jsonwebtoken body-parser ejs htmlspecialchars mysql2 md5 slashes@2.0.0
 // https://www.npmjs.com/package/slashes/v/2.0.0
 
 const express = require('express');
@@ -18,6 +18,7 @@ app.set('views', path.join(__dirname, "/views"));
 
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
+var jwt = require('jsonwebtoken');
 
 var htmlspecialchars = require('htmlspecialchars');
 var md5 = require('md5');
@@ -75,7 +76,12 @@ app.post("/login",async (req,res)=>{
         } else {
             // console.log("id=",rows[0].id);
             let val = `${rows[0].id},${rows[0].name}`;
-            res.cookie("ImLogged", val, {
+            var token = jwt.sign(
+                {data: val},
+                'myPrivateKey',
+                { expiresIn: 31*24*60*60 // in sec
+                });
+            res.cookie("ImLogged", token, {
                 maxAge: 31*24*60*60 * 1000, // 3hrs in ms
             });
             //HadLoggin=true;
