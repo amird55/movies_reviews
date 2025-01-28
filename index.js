@@ -144,6 +144,22 @@ app.get("/ssr", (req,res)=>{
     );
 });
 app.get('/Lpage', (req, res) => {
+    //אם עשיתי בעבר לוגין אני רוצה לעבור לעמוד פנימי
+    const jwtToken = req.cookies.ImLogged;
+    let user_id=-1;
+    if (jwtToken !== "") {
+        jwt.verify(jwtToken, 'myPrivateKey', async (err, decodedToken) => {
+                console.log("decodedToken=",decodedToken);
+            if (err) {
+                console.log("err=",err);
+            } else {
+                // let val = `${rows[0].id},${rows[0].name}`;
+                let data = decodedToken.data;
+                console.log("data=",data);
+            }
+        })
+    }
+
     res.status(200).sendFile(path.join(__dirname,"/views/login.html"));
 });
 app.get('/p1', (req, res) => {
